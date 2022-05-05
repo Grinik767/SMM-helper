@@ -3,6 +3,9 @@ import numpy as np
 import os
 import pickle
 import re
+import requests
+import json
+from random import choice
 from keras.models import load_model
 
 
@@ -58,3 +61,29 @@ def get_vector_from_tokens(token, tokenH):
 def get_result(images, text):
     modelres = load_model('models/result.h5')
     return modelres.predict([text, images])
+
+
+def make_result_funny(result):
+    apikey = '7RD4UO197EXC'
+    lmt = 15
+    if result > 6:
+        search_term = 'best'
+    elif 3.5 <= result <= 6:
+        search_term = 'good'
+    elif 1 <= result < 3.5:
+        search_term = 'so so'
+    else:
+        search_term = 'bad'
+    r = requests.get(
+        "https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s&contentfilter=%s" % (
+            search_term, apikey, lmt, 'medium'))
+    if r.status_code == 200:
+        url = choice(json.loads(r.content)['results'])['media'][0]['gif']['url']
+        gif = requests.get(url).content
+        return gif
+    return None
+
+
+def make_secret_key():
+    alph = [chr(i) for i in range(65, 91)] + [chr(i) for i in range(97, 123)] + [chr(i) for i in range(48, 58)]
+    return ''.join([choice(alph) for _ in range(250)])
