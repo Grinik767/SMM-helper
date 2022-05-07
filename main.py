@@ -45,17 +45,19 @@ def end(message):
             photo_names = []
             for ph in os.listdir(f'data/{message.chat.id}'):
                 f = open(f'data/{message.chat.id}/{ph}', 'rb')
-                photo_name = requests.post('http://localhost:8080/api/work_photos', files={'photo': f}).json()['names'][
+                photo_name = \
+                requests.post('https://smmhelper.herokuapp.com/api/work_photos', files={'photo': f}).json()['names'][
                     0]
                 photo_names.append(photo_name)
                 f.close()
-            add_to_db = requests.post('http://localhost:8080/api/work', json={'photos': ';'.join(photo_names),
-                                                                              'text': chats[message.chat.id]['txt'],
-                                                                              'chat_id': message.chat.id,
-                                                                              'result': result}).json()
+            add_to_db = requests.post('https://smmhelper.herokuapp.com/api/work', json={'photos': ';'.join(photo_names),
+                                                                                        'text': chats[message.chat.id][
+                                                                                            'txt'],
+                                                                                        'chat_id': message.chat.id,
+                                                                                        'result': result}).json()
             if 'success' not in add_to_db:
                 raise KeyError
-            request = requests.post('http://localhost:8080/api/user',
+            request = requests.post('https://smmhelper.herokuapp.com/api/user',
                                     json={'chat_id': message.chat.id, 'ident': for_link})
             gif = make_result_funny(result)
             if gif:
@@ -63,6 +65,9 @@ def end(message):
             bot.send_message(message.chat.id,
                              f"Результат анализа - {result}%\n\n❗❗❗Результат примерный. Не советуем на него полагаться❗❗❗",
                              reply_markup=markup)
+            bot.send_message(message.chat.id,
+                             f"Все ваши попытки можно посмотреть по [ссылке](https://smmhelper.herokuapp.com/{message.chat.id}/{for_link})",
+                             reply_markup=markup, parse_mode='Markdown')
             del chats[message.chat.id]
             shutil.rmtree(f'data/{message.chat.id}')
         except Exception:
