@@ -1,0 +1,23 @@
+img {
+    margin: 1% 2% 1%;
+    width: 45%;
+}
+
+.photo-title {
+    width: 45%;
+    word-break: break-all;
+}
+
+.photo {
+    width: 45%;
+    display: inherit;
+    word-break: break-all;
+}
+.text {
+    width: 35%;
+    word-break: break-all;
+}
+.result {
+    width: 20%;
+    word-break: break-all;
+}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="text-align: center">Все попытки для chat id: {{ chat_id }}</h2>
+
+<table class="table table-bordered border-primary">
+    <thead>
+        <tr>
+          <th style="text-align: center" class="photo-title" scope="col">Картинки</th>
+          <th style="text-align: center" class="text" scope="col">Текст</th>
+          <th style="text-align: center" class="result" scope="col">Результат</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in works%}
+        <tr>
+            <td class="photo">
+            {% for ph in item[0]%}
+                <img src="{{ph}}">
+            {% endfor %}
+            </td>
+            <td class="text">{{item[1]}}</td>
+            <td class="result">{{item[2]}}%</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
