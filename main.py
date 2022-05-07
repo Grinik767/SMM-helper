@@ -10,7 +10,7 @@ db_session.global_init("db/data.db")
 app.register_blueprint(api.blueprint)
 
 
-@app.route('/<chat_id>/<secret_key>')
+@app.route('/<int:chat_id>/<secret_key>')
 def index(chat_id, secret_key):
     db_sess = db_session.create_session()
     check_user = db_sess.query(User).get(int(chat_id))
